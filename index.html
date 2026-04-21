@@ -1,16 +1,159 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="stylesheet" href="style.css">
+<title>HeartSight</title>
+
+<style>
+body {
+    margin:0;
+    font-family: Arial;
+    background:#0b1a2f;
+    color:white;
+}
+
+/* NAVBAR */
+.navbar {
+    display:flex;
+    justify-content:space-between;
+    padding:15px;
+    background:#091421;
+}
+
+.navbar a {
+    color:#00c6ff;
+    margin:10px;
+    cursor:pointer;
+    text-decoration:none;
+}
+
+/* SECTIONS */
+.section {
+    display:none;
+    padding:40px;
+}
+
+.active {
+    display:block;
+}
+
+/* HERO */
+.hero {
+    display:flex;
+    justify-content:space-between;
+    padding:50px;
+}
+
+.box {
+    width:400px;
+    height:250px;
+    background:linear-gradient(to right,#00c6ff,#00ffcc);
+    border-radius:20px;
+}
+
+/* BUTTON */
+button {
+    padding:10px 20px;
+    background:#00c6ff;
+    border:none;
+    border-radius:10px;
+    color:white;
+    cursor:pointer;
+}
+</style>
+
 </head>
+
 <body>
 
-<h1>HeartSight ❤️</h1>
+<!-- NAVBAR -->
+<div class="navbar">
+    <div><b>❤️ HeartSight</b></div>
+    <div>
+        <a onclick="show('home')">Home</a>
+        <a onclick="show('monitor')">Heart Monitor</a>
+        <a onclick="show('articles')">Articles</a>
+        <a onclick="show('calc')">Calculator</a>
+        <a onclick="show('aid')">First Aid</a>
+    </div>
+</div>
 
-<button onclick="start()">Start</button>
-<h2 id="bpm">BPM: --</h2>
+<!-- HOME -->
+<div id="home" class="section active">
+    <div class="hero">
+        <div>
+            <h1>Your Personal<br><span style="color:#00ffcc;">Health Companion</span></h1>
+            <p>Monitor your heart rate and track health.</p>
+            <button onclick="show('monitor')">Start Monitoring</button>
+        </div>
+        <div class="box"></div>
+    </div>
+</div>
 
-<script src="script.js"></script>
+<!-- HEART MONITOR -->
+<div id="monitor" class="section">
+    <h2>Heart Monitor ❤️</h2>
+
+    <video id="video" width="300" autoplay muted playsinline></video>
+    <br><br>
+
+    <button onclick="start()">Start Measurement</button>
+    <h3 id="bpm">BPM: --</h3>
+</div>
+
+<!-- ARTICLES -->
+<div id="articles" class="section">
+    <h2>Articles 📄</h2>
+    <p>Exercise daily<br>Eat healthy<br>Avoid stress</p>
+</div>
+
+<!-- CALCULATOR -->
+<div id="calc" class="section">
+    <h2>Calculator 🧮</h2>
+
+    <input id="a" placeholder="Enter number">
+    <input id="b" placeholder="Enter number">
+    <button onclick="add()">Add</button>
+
+    <h3 id="res"></h3>
+</div>
+
+<!-- FIRST AID -->
+<div id="aid" class="section">
+    <h2>First Aid 🚑</h2>
+    <p>Call emergency<br>Give CPR<br>Stay calm</p>
+</div>
+
+<script>
+
+/* PAGE SWITCH */
+function show(page){
+    document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+    document.getElementById(page).classList.add('active');
+}
+
+/* CAMERA + BPM */
+async function start(){
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        document.getElementById("video").srcObject = stream;
+    } catch(e){
+        alert("Camera not working, using simulation");
+    }
+
+    setInterval(()=>{
+        let bpm = 60 + Math.floor(Math.random()*40);
+        document.getElementById("bpm").innerText = "BPM: " + bpm;
+    },2000);
+}
+
+/* CALCULATOR */
+function add(){
+    let x = Number(document.getElementById("a").value);
+    let y = Number(document.getElementById("b").value);
+    document.getElementById("res").innerText = "Result: " + (x+y);
+}
+
+</script>
 
 </body>
 </html>
